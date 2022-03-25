@@ -23,9 +23,6 @@
 	AIWinMsg:			.asciiz		"You lost :("
 	PlayerWinMsg:		.asciiz		"You Won! :D"
 	
-	# TODO delete BoardSplit
-	BoardSplit:			.asciiz		"|-+-+-+-+-+-+-|\n"
-	
 	.globl main
 	.globl AfterChoice
 	.eqv Counter $s7
@@ -137,10 +134,10 @@ Tie:
 		exit
 # =============
 
-# .include 	fileForAIChoice				
-# .include	fileForPlayerChoice
-# .include 	fileForDisplayBoard
-# .include 	fileForWinCheck
+# .include fileForAIChoice
+# .include fileForPlayerChoice
+.include DisplayBoard
+# .include fileForWinCheck
 
 # ==========================================
 # TODO: test code DELETE BEFORE TURN IN
@@ -170,30 +167,6 @@ PlayerChoice:
 				add $t1, $t1, $t7
 				add $v1, $t1, $s0
 
-				jr $ra
-
-DisplayBoard:	
-				# print out the Board
-				addi $t0, $a0, 7
-				add $t1, $zero, $zero
-				li $v0, 11
-			loop2:
-				add $t0, $t0, 1
-				li $a0, '|'
-				syscall
-				lb $a0, 0($t0)
-				syscall
-				addi $t1, $t1, 1
-				bne $a0, '\n', loop2
-					la $a0, BoardSplit
-					li $v0, 4
-					syscall
-					li $v0, 11
-				bne $t1, 48, loop2
-				
-				li $a0, '\n'
-				syscall
-				syscall
 				jr $ra
 
 WinCheck:		
