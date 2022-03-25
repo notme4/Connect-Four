@@ -24,7 +24,7 @@
 	PlayerWinMsg:		.asciiz		"You Won! :D"
 	
 	.globl main
-	.globl AfterChoice
+	.globl makePlay
 	.eqv Counter $s7
 	
 .text
@@ -57,23 +57,34 @@ main:
 		add $a0, $s0, $zero
 		# if Counter is even AI turn, else player turn
 		beqz $s6, AIChoice		
-	# AIChoice takes 1 argument: address of Board, and has 2 returns the address of the column and the address of the play, jumps to afterChoice at end
+	# AIChoice takes 1 argument: address of Board, and has 1 return the address of the column, jumps to makePlay at end
 		# jump to playerChoice 'function'
 		jal PlayerChoice		
-	# PlayerChoice take 1 argument: address of Board, and has 2 returns: the address of the column and the address of the play
+	# PlayerChoice take 1 argument: address of Board, and has 1 returns: the address of the column
 				
-	AfterChoice:	
+	makePlay:
+
 		# address of the column is moved to $s1
 		add $s1, $v0, $zero
+
+		# arguments prepared for addPiece
+		add $a0, $s0, $zero
+		add $a1, $s1, $zero
+
+		jal addPiece
+	# addPiece takes 2 arguments: address of board, and address of column; and has 1 return address of play
+
 		# address of the spot played is moved to $s2
 		add $s2, $v1, $zero
 		
+	# TO BE MOVED to addPiece ==================
 		# store token value in cell
 		li $t9, 'R'
 		beqz $s6, Store
 			addi $t9, $t9, 7
 		Store:
 		sb $t9, 0($s2)
+	# END TO BE MOVED to addPiece ==============
 		
 		# decrement column height value
 		addi $t0, $t1, -9	# TODO: why is it 9 and not 8?
@@ -149,7 +160,7 @@ AIChoice:
 				add $t1, $t1, $t7
 				add $v1, $t1, $s0
 
-				j AfterChoice
+				j makePlay
 
 PlayerChoice:	
 				# Player "Choice"
