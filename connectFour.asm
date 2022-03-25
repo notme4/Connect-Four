@@ -36,9 +36,6 @@
 .end_macro 
 # ======================================================
 
-# TODO: possibly add Player 1/2 AI/Player Choice
-# TODO: possibly add play again mechanic
-
 main:			
 	# store Board address in $s0
 	la $s0, Board
@@ -140,7 +137,6 @@ Tie:
 # .include fileForWinCheck
 
 # ==========================================
-# TODO: test code DELETE BEFORE TURN IN
 AIChoice:		
 				# AI "Choice"
 				li $t7, 1
