@@ -1,11 +1,9 @@
 # Connect-Four
->
-> Connect Four game in MIPS assembly language
->
 
-
-Author:     notme4
-Date:       03/25/2022
-Version:    0.0.4
-Notes:      
+> Description:  Connect Four game in MIPS assembly language
+> Purpose:      CS 2340 project
+> Author:       notme4
+> Date:         03/25/2022
+> Version:      0.0.4
+> Notes:        none
 
