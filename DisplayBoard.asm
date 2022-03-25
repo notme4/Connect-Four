@@ -1,7 +1,7 @@
 # ==============================================================================
 # Project: Connect 4
 # 	Description:    Connect 4 game against an AI
-# 	Authors:	    Connor Funk
+# 	Author(s):	    Connor Funk
 #	Date:		    
 #	Version:	    0.0
 # ==============================================================================

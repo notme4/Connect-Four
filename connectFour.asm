@@ -1,7 +1,7 @@
 # ==============================================================================
 # Project: Connect 4
 # 	Purpose:	Connect 4 game against an AI
-# 	Authors:	Connor Funk, Blackout, SyedQadri, Thomas
+# 	Author(s):	Connor Funk
 #	Date:		
 #	Version:	0.0
 # ==============================================================================
