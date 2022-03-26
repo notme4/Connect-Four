@@ -5,8 +5,8 @@
 #	Date:		    
 #	Version:	    0.0
 # ==============================================================================
-# displayBoard.asm:
-#	Description:	'function' to display board for Connect 4 project
+# Choice.asm:
+#	Description:	'function' to get the player/AI's choice for Connect 4 project
 #	Author:		    Connor Funk
 #`	Date:		    Mar. 25, 2022
 #	Version:        0.0.1
