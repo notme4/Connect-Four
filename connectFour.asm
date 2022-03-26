@@ -1,10 +1,4 @@
 # ==============================================================================
-# Project: Connect 4
-# 	Purpose:	Connect 4 game against an AI
-# 	Author(s):	Connor Funk
-#	Date:		
-#	Version:	0.0
-# ==============================================================================
 # connectFour.asm:
 #	Purpose:	main 'function' for Connect 4 project
 #	Author:		Connor Funk

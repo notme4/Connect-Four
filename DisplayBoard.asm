@@ -1,10 +1,4 @@
 # ==============================================================================
-# Project: Connect 4
-# 	Description:    Connect 4 game against an AI
-# 	Author(s):	    Connor Funk
-#	Date:		    
-#	Version:	    0.0
-# ==============================================================================
 # displayBoard.asm:
 #	Description:	'function' to display board for Connect 4 project
 #	Author:		    Connor Funk
@@ -62,4 +56,3 @@
 
 		# return
 		jr $ra
-		
