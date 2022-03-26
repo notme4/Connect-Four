@@ -50,9 +50,9 @@
 .text
     PlayerChoice:
         # save $s0 and $ra to stack
-        addi $sp, -8
-        sw $s0, 8($sp)
-        sw $ra, 4($sp)
+        addi $sp, $sp, -8
+        sw $s0, 4($sp)
+        sw $ra, 0($sp)
         
         # move address of board to $s0
         add $s0, $a0, $zero
@@ -81,28 +81,28 @@
             add $t0, $v0, $zero
 
         # if player choice is too low get a new input
-        blt $t0, $zero, getPlayerChoice
+        blt $t0, $zero, tooSmall
         
         # if player choice is too high get a new input
         li $t1, 6
-        bgt $t0, $t1, getPlayerChoice
+        bgt $t0, $t1, tooLarge
             
             # get address of col and put in $v0
-            add $v1, $t0, $s0
+            add $v0, $t0, $s0
             
             # find out how many spaces are left in the col
-            lb $t3, ($v1)
+            lb $t3, ($v0)
 
         # col is filled get a new input
-        beq $t3, $zero, getPlayerChoice
+        beq $t3, $zero, colFull
 
         # get address of play and store in $v0
-        add $v0, $t3, $v1
+        add $v1, $t3, $v0
 
         # fix $s0, and prepare to return
+        lw $s0, 4($sp)
+        lw $ra, 0($sp)
         addi $sp, $sp, 8
-        lw $s0, -8($sp)
-        lw $ra, -4($sp)
 
         # return
         jr $ra
@@ -126,4 +126,4 @@
     colFull:
         errorMsg (colFullMsg)
 
-.include DisplayBoard.asm
+.include "DisplayBoard.asm"

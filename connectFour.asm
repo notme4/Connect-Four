@@ -58,7 +58,7 @@ main:
 		# arguments prepared for choice
 		add $a0, $s0, $zero
 		# if Counter is even AI turn, else player turn
-		beqz $s6, AIChoice
+		bnez $s6, AIChoice
 	# AIChoice takes 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
 		# jump to playerChoice 'function'
 		j PlayerChoice
@@ -79,7 +79,7 @@ main:
 		add $a0, $s0, $zero
 		add $a1, $s1, $zero
 
-		jal addPiece
+	#	jal addPiece
 	# addPiece takes 2 arguments: address of board, and address of play; and has 0 returns: updates board
 
 		# address of the spot played is moved to $s2
@@ -153,8 +153,7 @@ Tie:
 		exit
 # =============
 
-.include Choice.asm
-.include DisplayBoard.asm
+.include "Choice.asm"
 # .include fileForWinCheck
 
 # ==========================================
