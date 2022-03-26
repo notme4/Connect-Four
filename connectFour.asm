@@ -1,7 +1,7 @@
 # ==============================================================================
 # Project: Connect 4
 # 	Purpose:	Connect 4 game against an AI
-# 	Authors:	Connor Funk, Blackout, SyedQadri, Thomas
+# 	Author(s):	Connor Funk
 #	Date:		
 #	Version:	0.0
 # ==============================================================================
@@ -23,11 +23,8 @@
 	AIWinMsg:			.asciiz		"You lost :("
 	PlayerWinMsg:		.asciiz		"You Won! :D"
 	
-	# TODO delete BoardSplit
-	BoardSplit:			.asciiz		"|-+-+-+-+-+-+-|\n"
-	
 	.globl main
-	.globl AfterChoice
+	.globl makePlay
 	.eqv Counter $s7
 	
 .text
@@ -38,9 +35,6 @@
 				syscall	
 .end_macro 
 # ======================================================
-
-# TODO: possibly add Player 1/2 AI/Player Choice
-# TODO: possibly add play again mechanic
 
 main:			
 	# store Board address in $s0
@@ -63,23 +57,34 @@ main:
 		add $a0, $s0, $zero
 		# if Counter is even AI turn, else player turn
 		beqz $s6, AIChoice		
-	# AIChoice takes 1 argument: address of Board, and has 2 returns the address of the column and the address of the play, jumps to afterChoice at end
+	# AIChoice takes 1 argument: address of Board, and has 1 return the address of the column, jumps to makePlay at end
 		# jump to playerChoice 'function'
 		jal PlayerChoice		
-	# PlayerChoice take 1 argument: address of Board, and has 2 returns: the address of the column and the address of the play
+	# PlayerChoice take 1 argument: address of Board, and has 1 returns: the address of the column
 				
-	AfterChoice:	
+	makePlay:
+
 		# address of the column is moved to $s1
 		add $s1, $v0, $zero
+
+		# arguments prepared for addPiece
+		add $a0, $s0, $zero
+		add $a1, $s1, $zero
+
+		jal addPiece
+	# addPiece takes 2 arguments: address of board, and address of column; and has 1 return address of play
+
 		# address of the spot played is moved to $s2
 		add $s2, $v1, $zero
 		
+	# TO BE MOVED to addPiece ==================
 		# store token value in cell
 		li $t9, 'R'
 		beqz $s6, Store
 			addi $t9, $t9, 7
 		Store:
 		sb $t9, 0($s2)
+	# END TO BE MOVED to addPiece ==============
 		
 		# decrement column height value
 		addi $t0, $t1, -9	# TODO: why is it 9 and not 8?
@@ -137,13 +142,12 @@ Tie:
 		exit
 # =============
 
-# .include 	fileForAIChoice				
-# .include	fileForPlayerChoice
-# .include 	fileForDisplayBoard
-# .include 	fileForWinCheck
+# .include fileForAIChoice
+# .include fileForPlayerChoice
+.include DisplayBoard
+# .include fileForWinCheck
 
 # ==========================================
-# TODO: test code DELETE BEFORE TURN IN
 AIChoice:		
 				# AI "Choice"
 				li $t7, 1
@@ -156,7 +160,7 @@ AIChoice:
 				add $t1, $t1, $t7
 				add $v1, $t1, $s0
 
-				j AfterChoice
+				j makePlay
 
 PlayerChoice:	
 				# Player "Choice"
@@ -170,30 +174,6 @@ PlayerChoice:
 				add $t1, $t1, $t7
 				add $v1, $t1, $s0
 
-				jr $ra
-
-DisplayBoard:	
-				# print out the Board
-				addi $t0, $a0, 7
-				add $t1, $zero, $zero
-				li $v0, 11
-			loop2:
-				add $t0, $t0, 1
-				li $a0, '|'
-				syscall
-				lb $a0, 0($t0)
-				syscall
-				addi $t1, $t1, 1
-				bne $a0, '\n', loop2
-					la $a0, BoardSplit
-					li $v0, 4
-					syscall
-					li $v0, 11
-				bne $t1, 48, loop2
-				
-				li $a0, '\n'
-				syscall
-				syscall
 				jr $ra
 
 WinCheck:		
