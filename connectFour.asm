@@ -94,7 +94,7 @@ main:
 		sb $t9, 0($s2)
 		# decrement column height value
 		lb $t1, ($s1)
-		addi $t0, $t1, -9	# TODO: why is it 9 and not 8?
+		addi $t0, $t1, -8	# TODO: why is it 9 and not 8?
 		sb $t0, ($s1)
 	# END TO BE MOVED to addPiece ==============
 		

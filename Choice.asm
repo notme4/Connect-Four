@@ -20,9 +20,9 @@
 
 # ==============================================================================
 # data segment for AIChoice
-    posPlays    .byte   0,  1,  2,  3,  4,  5,  6
+    posPlays:       .byte   0,  1,  2,  3,  4,  5,  6
     
-    numPlays .byte   7
+    numPlays:       .byte   7
     # AI's choice of 
 
 
@@ -48,10 +48,11 @@
         syscall
 
         # set $t7 to AI's Choice
-        lb $t7, posPlays($v0)
+        lb $t7, posPlays($a0)
 
 		# get next open location in that column
 		add $v0, $s0, $t7
+
 		lb $t1, ($v0)
 		
         # if no more valid plays on the column jump to invalid play
@@ -72,17 +73,17 @@
     invalidPlay:
         # decrement numPlays
         lb $t0, numPlays
-        addi $t0, -1
+        addi $t0, $t0, -1
         sb $t0, numPlays
 
         posPlaysLoop:
         # end loop if at end of posPlays
-        bge $v0, $t0, AiChoice
-            lb $t3, 1 + posPlays ($v0)
+        bge $v0, $t0, AIChoice
+            lb $t3, posPlays + 1 ($v0)
             sb $t3, posPlays ($v0)
             addi $v0, $v0, 1
 
-            j posPlaysLoop
+        j posPlaysLoop
 
 
 # ==============================================================================
