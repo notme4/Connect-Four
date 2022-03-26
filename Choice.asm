@@ -20,12 +20,21 @@
 
 # ==============================================================================
 # data segment for AIChoice
+    Plays    .byte   0,  1,  2,  3,  4,  5,  6
+    
+    numPlays .byte   7
+    # AI's choice of 
+
 
 .text
     AIChoice:
-        # AI "Choice"
-		li $t7, 1
+      # save $s0 and $ra to stack
+      addi $sp, $sp, -8
+      sw $s0, 4($sp)
+      sw $ra, 0($sp)
 		
+
+
 		# get next open location in that column
 		add $v0, $s0, $t7
 		lb $t1, ($v0)
@@ -34,7 +43,13 @@
 		add $t1, $t1, $t7
 		add $v1, $t1, $s0
 
-		jr $ra
+	  # fix $s0, and prepare to return
+      lw $s0, 4($sp)
+      lw $ra, 0($sp)
+      addi $sp, $sp, 8
+
+      # return
+      jr $ra
 
 # ==============================================================================
 .data
@@ -49,10 +64,10 @@
 
 .text
     PlayerChoice:
-        # save $s0 and $ra to stack
-        addi $sp, $sp, -8
-        sw $s0, 4($sp)
-        sw $ra, 0($sp)
+      # save $s0 and $ra to stack
+      addi $sp, $sp, -8
+      sw $s0, 4($sp)
+      sw $ra, 0($sp)
         
         # move address of board to $s0
         add $s0, $a0, $zero
@@ -99,31 +114,31 @@
         # get address of play and store in $v0
         add $v1, $t3, $v0
 
-        # fix $s0, and prepare to return
-        lw $s0, 4($sp)
-        lw $ra, 0($sp)
-        addi $sp, $sp, 8
+      # fix $s0, and prepare to return
+      lw $s0, 4($sp)
+      lw $ra, 0($sp)
+      addi $sp, $sp, 8
 
-        # return
-        jr $ra
+      # return
+      jr $ra
 
-    .macro errorMsg (%label) # ==============================
+    .macro errorMsg (%label, %returnLabel) # ==============================
         # print error message
         li $v0, 4
         la $a0, %label
         syscall
 
         # jump to getPlayerChoice
-        j getPlayerChoice
+        j %returnLabel
     .end_macro # ============================================
 
     tooSmall:
-        errorMsg (tooSmallMsg)
+        errorMsg (tooSmallMsg, getPlayerChoice)
 
     tooLarge:
-        errorMsg (tooLargeMsg)
+        errorMsg (tooLargeMsg, getPlayerChoice)
 
     colFull:
-        errorMsg (colFullMsg)
+        errorMsg (colFullMsg, getPlayerChoice)
 
 .include "DisplayBoard.asm"
