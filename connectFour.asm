@@ -51,28 +51,36 @@ main:
 		
 		# store counter parity in $s6
 		andi $s6, Counter, 1
-				
-	choice:			
+		
+		# jump to makePlay to set $ra
+		j makePlay
+	choice:
 		# arguments prepared for choice
 		add $a0, $s0, $zero
 		# if Counter is even AI turn, else player turn
-		beqz $s6, AIChoice		
-	# AIChoice takes 1 argument: address of Board, and has 1 return the address of the column, jumps to makePlay at end
+		beqz $s6, AIChoice
+	# AIChoice takes 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
 		# jump to playerChoice 'function'
-		jal PlayerChoice		
-	# PlayerChoice take 1 argument: address of Board, and has 1 returns: the address of the column
-				
+		j PlayerChoice
+	# PlayerChoice take 1 argument: address of Board; and has 2 returns: the address of the play and the address of the play
+		
 	makePlay:
+		# set $ra for after the choice
+		jal choice
+
 
 		# address of the column is moved to $s1
 		add $s1, $v0, $zero
+		# address of the play is moved to $s2
+		add $s2, $v1, $zero
+
 
 		# arguments prepared for addPiece
 		add $a0, $s0, $zero
 		add $a1, $s1, $zero
 
 		jal addPiece
-	# addPiece takes 2 arguments: address of board, and address of column; and has 1 return address of play
+	# addPiece takes 2 arguments: address of board, and address of play; and has 0 returns: updates board
 
 		# address of the spot played is moved to $s2
 		add $s2, $v1, $zero
@@ -84,17 +92,20 @@ main:
 			addi $t9, $t9, 7
 		Store:
 		sb $t9, 0($s2)
-	# END TO BE MOVED to addPiece ==============
-		
 		# decrement column height value
+		lb $t1, ($s1)
 		addi $t0, $t1, -9	# TODO: why is it 9 and not 8?
 		sb $t0, ($s1)
+	# END TO BE MOVED to addPiece ==============
 		
+
+# can this be deleted now? ===================================================
 		# argument prepared for displayBoard
 		add $a0, $s0, $zero
 		# jump to displayBoard 'function'
 		jal DisplayBoard		
 	# displayBoard takes 1 argument: address of Board, and has no return
+# ============================================================================
 		
 		
 		add $a0, $s0, $zero
@@ -142,9 +153,8 @@ Tie:
 		exit
 # =============
 
-# .include fileForAIChoice
-# .include fileForPlayerChoice
-.include DisplayBoard
+.include Choice.asm
+.include DisplayBoard.asm
 # .include fileForWinCheck
 
 # ==========================================

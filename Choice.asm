@@ -21,10 +21,9 @@
 # ==============================================================================
 # data segment for AIChoice
 
-
 .text
     AIChoice:
-
+        
 
 # ==============================================================================
 .data
@@ -78,16 +77,16 @@
         bgt $t0, $t1, getPlayerChoice
             
             # get address of col and put in $v0
-            add $t2, $t0, $s0
+            add $v1, $t0, $s0
             
             # find out how many spaces are left in the col
-            lb $t3, ($t2)
+            lb $t3, ($v1)
 
         # col is filled get a new input
         beq $t3, $zero, getPlayerChoice
 
         # get address of play and store in $v0
-        add $v0, $t3, $t2
+        add $v0, $t3, $v1
 
         # fix $s0, and prepare to return
         addi $sp, $sp, 8
@@ -115,3 +114,5 @@
 
     colFull:
         errorMsg (colFullMsg)
+
+.include DisplayBoard.asm
