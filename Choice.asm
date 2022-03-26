@@ -23,7 +23,18 @@
 
 .text
     AIChoice:
-        
+        # AI "Choice"
+		li $t7, 1
+		
+		# get next open location in that column
+		add $v0, $s0, $t7
+		lb $t1, ($v0)
+				
+		# get the address of the play
+		add $t1, $t1, $t7
+		add $v1, $t1, $s0
+
+		jr $ra
 
 # ==============================================================================
 .data
