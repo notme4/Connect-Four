@@ -73,7 +73,7 @@ main:
 		add $s1, $v0, $zero
 		# address of the play is moved to $s2
 		add $s2, $v1, $zero
-
+ 
 
 		# arguments prepared for addPiece
 		add $a0, $s0, $zero
