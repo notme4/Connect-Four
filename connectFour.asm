@@ -62,7 +62,7 @@ main:
 	# AIChoice takes 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
 		# jump to playerChoice 'function'
 		j PlayerChoice
-	# PlayerChoice take 1 argument: address of Board; and has 2 returns: the address of the play and the address of the play
+	# PlayerChoice take 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
 		
 	makePlay:
 		# set $ra for after the choice
@@ -94,7 +94,7 @@ main:
 		sb $t9, 0($s2)
 		# decrement column height value
 		lb $t1, ($s1)
-		addi $t0, $t1, -8	# TODO: why is it 9 and not 8?
+		addi $t0, $t1, -8
 		sb $t0, ($s1)
 	# END TO BE MOVED to addPiece ==============
 		
@@ -155,7 +155,7 @@ Tie:
 
 .include "Choice.asm"
 # .include fileForWinCheck
-
+# .include fileForAddPiece
 # ==========================================
 
 WinCheck:		
