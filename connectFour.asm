@@ -161,23 +161,3 @@ Tie:
 WinCheck:		
 				add $v0, $s6, $zero
 				jr $ra
-				
-#	partial code for check if choice is valid should be in AIChoice and PlayerChoice
-#		InvalidChoiceMsg:	.asciiz		"Invalid Choice: column is full"
-#		# ==================================	
-#		# store address for the column height in $s1
-#		add $s1, $s0, $s3
-#		# store value of Column height in $t0
-#		lb $t0, 0($s1)
-#		# if column is full choice is invalid and a new choice needs to be made
-#		beq $t0, 7, invalidChoice		
-#		# store address for the cell in $s2
-#		sll $t1, $t0, 3
-#		add $s2, $s1, $t1
-#		# ==================================
-#	# print 'Invalid Choice: column is full' then jump to choice again
-#	InvalidChoice:  
-#		li $v0, 4
-#		la $a0, InvalidChoiceMsg
-#		syscall
-#		j choice
