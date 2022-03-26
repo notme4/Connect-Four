@@ -20,7 +20,7 @@
 
 # ==============================================================================
 # data segment for AIChoice
-    Plays    .byte   0,  1,  2,  3,  4,  5,  6
+    posPlays    .byte   0,  1,  2,  3,  4,  5,  6
     
     numPlays .byte   7
     # AI's choice of 
@@ -33,12 +33,30 @@
       sw $s0, 4($sp)
       sw $ra, 0($sp)
 		
+        # set $s0 to board
+        add $s0, $a0, $zero
 
+        # get system time for random int
+        li $v0, 30
+        syscall
+
+        add $a0, $a1, $zero
+
+        # get a random integer in play space
+        li $v0, 42
+        lb $a1, numPlays
+        syscall
+
+        # set $t7 to AI's Choice
+        lb $t7, posPlays($v0)
 
 		# get next open location in that column
 		add $v0, $s0, $t7
 		lb $t1, ($v0)
-				
+		
+        # if no more valid plays on the column jump to invalid play
+        beqz $t1, invalidPlay
+
 		# get the address of the play
 		add $t1, $t1, $t7
 		add $v1, $t1, $s0
@@ -50,6 +68,22 @@
 
       # return
       jr $ra
+
+    invalidPlay:
+        # decrement numPlays
+        lb $t0, numPlays
+        addi $t0, -1
+        sb $t0, numPlays
+
+        posPlaysLoop:
+        # end loop if at end of posPlays
+        bge $v0, $t0, AiChoice
+            lb $t3, 1 + posPlays ($v0)
+            sb $t3, posPlays ($v0)
+            addi $v0, $v0, 1
+
+            j posPlaysLoop
+
 
 # ==============================================================================
 .data
