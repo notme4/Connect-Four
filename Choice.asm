@@ -36,12 +36,16 @@
 
 #        add $a0, $a1, $zero
 
+	rechoose:
+
         # get a random integer in play space
         li $v0, 42
         lb $a1, numPlays
         syscall
-
-        # set $t7 to AI's Choice
+		
+		#set $t6 to AI's Choice of option
+		add $t6, $a0, $zero
+        # set $t7 to AI's Choice of column
         lb $t7, posPlays($a0)
 
 		# get next open location in that column
@@ -72,10 +76,10 @@
 
         posPlaysLoop:
         # end loop if at end of posPlays
-        bge $v0, $t0, AIChoice
-            lb $t3, posPlays + 1 ($v0)
-            sb $t3, posPlays ($v0)
-            addi $v0, $v0, 1
+        bge $t6, $t0, rechoose
+            lb $t3, posPlays + 1 ($t6)
+            sb $t3, posPlays ($t6)
+            addi $t6, $t6, 1
 
         j posPlaysLoop
 
