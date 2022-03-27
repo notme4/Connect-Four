@@ -123,7 +123,7 @@
         check ($t7, $t2, -8)
         # set $t2 to address of first spot in next direction
         addi $t2, $s2, 8
-        check (%$t7, $t2, 8)
+        check ($t7, $t2, 8)
 
         # if all spaces filled game is a Tie
 		beq $s7, 42, Tie

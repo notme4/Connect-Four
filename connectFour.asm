@@ -10,7 +10,7 @@
 .data
 
 	
-	Board:				.asciiz		"0000000\00000000\n0000000\n0000000\n0000000\n0000000\n0000000\n\n"
+	Board:				.asciiz		"0000000\0       \n       \n       \n       \n       \n       \n\n"
 	# Board is an array of 56 bytes, each row of the connect four Board is 7 bytes with a \n in the 8th for ease of printing
 	#		the 0th row are pointers to the next empty locations (relative to it's location) in each column (ascii '0' just happened to be the right number)
 	

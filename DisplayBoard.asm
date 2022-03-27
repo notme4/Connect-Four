@@ -15,7 +15,7 @@
     DisplayBoard:	
 	# print out the Board
 		# set $t0 to the start of the board
-		addi $t0, $a0, 7
+		addi $t0, $a0, 8
 
 		# initiate end spot
 		addi $t1, $a0, 56
