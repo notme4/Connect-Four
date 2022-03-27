@@ -1,10 +1,4 @@
 # ==============================================================================
-# Project: Connect 4
-# 	Purpose:	Connect 4 game against an AI
-# 	Author(s):	Connor Funk
-#	Date:		
-#	Version:	0.0
-# ==============================================================================
 # connectFour.asm:
 #	Purpose:	main 'function' for Connect 4 project
 #	Author:		Connor Funk
@@ -16,12 +10,9 @@
 .data
 
 	
-	Board:				.asciiz		"0000000\00000000\n0000000\n0000000\n0000000\n0000000\n0000000\n\n"
+	Board:				.asciiz		"0000000\0       \n       \n       \n       \n       \n       \n\n"
 	# Board is an array of 56 bytes, each row of the connect four Board is 7 bytes with a \n in the 8th for ease of printing
 	#		the 0th row are pointers to the next empty locations (relative to it's location) in each column (ascii '0' just happened to be the right number)
-	TieMsg:				.asciiz	 	"Game was a Tie :|"
-	AIWinMsg:			.asciiz		"You lost :("
-	PlayerWinMsg:		.asciiz		"You Won! :D"
 	
 	.globl main
 	.globl makePlay
@@ -41,11 +32,6 @@ main:
 	la $s0, Board
 	# set counter to 0
 	li Counter, 0
-	# argument prepared for displayBoard
-	add $a0, $s0, $zero
-	# jump to displayBoard 'function'
-	jal DisplayBoard		
-	# displayBoard takes 1 argument: address of Board, and has no return	
 	
 	loop1:			
 		
@@ -68,7 +54,6 @@ main:
 		# set $ra for after the choice
 		jal choice
 
-
 		# address of the column is moved to $s1
 		add $s1, $v0, $zero
 		# address of the play is moved to $s2
@@ -87,9 +72,9 @@ main:
 		
 	# TO BE MOVED to addPiece ==================
 		# store token value in cell
-		li $t9, 'R'
+		li $t9, 'O'
 		beqz $s6, Store
-			addi $t9, $t9, 7
+			addi $t9, $t9, 9
 		Store:
 		sb $t9, 0($s2)
 		# decrement column height value
@@ -107,57 +92,28 @@ main:
 	# displayBoard takes 1 argument: address of Board, and has no return
 # ============================================================================
 		
-		
+		# arguments prepared for WinCheck
 		add $a0, $s0, $zero
 		add $a1, $s2, $zero
 		# jump to winCheck 'function'
-		jal WinCheck		# winCheck has 2 arguments: Board address and play spot, and has 1 return: 1 for win, 0 for no win
+		jal WinCheck		# winCheck has 3 arguments: Board address, play spot, and turn #; and has 1 return: 1 for win, 0 for no win
 		# if someone has won, $v0 is 1
 		
 		# jumps to gameEnd checks if game has been won
-		bnez $v0, GameEnd
+		bnez $v0, GameOver
 		
 		# increment Counter
 		addi Counter, Counter, 1
-				
-		# if all spaces filled game is a Tie
-		beq Counter, 42, Tie
 		
 		# jump to beginning of loop
 		j loop1
 		
 # ==================================
-# check who won
-GameEnd:		
-		li $v0, 4
-		# if turn is even AI Won, else player won
-		beqz $s6, AIWin
-		
-# print 'You Won! :D', then exit
-PlayerWin:		
-		la $a0, PlayerWinMsg
-		syscall
-		exit
-# ===================================
-# print 'You Lost :(', then exit
-AIWin:			
-		la $a0, AIWinMsg
-		syscall
-		exit
-# ===================================
-# print 'Game was a Tie :|', then exit
-Tie:			
-		la $a0, TieMsg
-		li $v0, 4
-		syscall
-		exit
-# =============
 
 .include "Choice.asm"
-# .include fileForWinCheck
+.include "WinCheck.asm"
 # .include fileForAddPiece
 # ==========================================
 
-WinCheck:		
-				add $v0, $s6, $zero
-				jr $ra
+GameOver:
+	exit
