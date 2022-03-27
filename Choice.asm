@@ -31,10 +31,10 @@
         add $s0, $a0, $zero
 
         # get system time for random int
-        li $v0, 30
-        syscall
+        li $v0, 40
+#        syscall
 
-        add $a0, $a1, $zero
+#        add $a0, $a1, $zero
 
         # get a random integer in play space
         li $v0, 42
@@ -87,9 +87,9 @@
     prompt:         .asciiz         "Enter a number between 0 and 6 \n"
     spots:          .asciiz         " 0 1 2 3 4 5 6 \n | | | | | | | \n v v v v v v v \n"
 
-    tooSmallMsg:    .asciiz         "Error: input must be at least 0"
-    tooLargeMsg:    .asciiz         "Error: input must be at most 6"
-    colFullMsg:     .asciiz         "Error: column is full"
+    tooSmallMsg:    .asciiz         "Error: input must be at least 0 \n"
+    tooLargeMsg:    .asciiz         "Error: input must be at most 6 \n"
+    colFullMsg:     .asciiz         "Error: column is full \n"
 
 .text
     PlayerChoice:

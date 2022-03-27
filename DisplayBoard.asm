@@ -17,16 +17,15 @@
 		# set $t0 to the start of the board
 		addi $t0, $a0, 7
 
-		# initiate counter
-		add $t1, $zero, $zero
+		# initiate end spot
+		addi $t1, $a0, 56
 
 		# set syscall choice to print char
 		li $v0, 11
 
 		# begin print loop
-		loop2:
+		displayLoop:
 			# print out spacer between cols
-			add $t0, $t0, 1
 			li $a0, '|'
 			syscall
 
@@ -35,10 +34,10 @@
 			syscall
 
 			# increment counter
-			addi $t1, $t1, 1
+			addi $t0, $t0, 1
 
 			# loop if line is not finished printing
-			bne $a0, '\n', loop2
+			bne $a0, '\n', displayLoop
 				# print out spacers between rows
 				la $a0, BoardSplit
 				li $v0, 4
@@ -47,7 +46,7 @@
 				# reset syscall choice to print char
 				li $v0, 11
 		# loop if board is not finished printing
-		bne $t1, 48, loop2
+		bne $t0, $t1, displayLoop
 		
 		# print new lines to seperate board
 		li $a0, '\n'

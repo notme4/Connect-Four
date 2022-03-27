@@ -34,6 +34,36 @@
 
 .end_macro 
 # ======================================================
+# check for win macro
+.macro check (%counter, %next, %val)
+
+    winCheckLoop:
+        # get value of the next in direction and put in $t1
+        lb $t1, (%next)
+    # if $t1 != $t2 (next spot has a different value to play spot) break out of loop
+    bne $t0, $t1, afterLoop
+
+        # increment counter
+        addi %counter, %counter, 1
+        # if counter == 4, game has been won
+        beq %counter, $t6, GameEnd
+
+        # load next spot
+        addi %next, %next, %val
+        
+        # if looking at non-existant '7th' row, break out of loop
+        addi $t3, $s0, 56
+    bgt %next, $t3, afterLoop
+
+        # if looking at non-existant '0th' row, break out of loop
+        addi $t3, $s0, 8
+    blt %next, $t3, afterLoop
+
+    j winCheckLoop
+    
+    afterLoop:
+.end_macro 
+# ======================================================
 
     WinCheck:
       # save $s#'s and $ra to stack
@@ -59,167 +89,41 @@
          # load win amount into $t6
         li $t6, 4
 
-        # initiate counter
+        # check \ direction
         li $t7, 0
         # set $t2 to address of play
-        add $t2, $s2, $zero
-
-        # upper left
-        winCheckLoop1:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, 7
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 56
-            bgt $t2, $t3, afterLoop1
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop1
-        
-        afterLoop1:
-
-        # set $t2 to address of next spot
+        addi $t2, $s2, 0
+        check ($t7, $t2, 7)
+        # set $t2 to address of first spot in next direction
         addi $t2, $s2, -7
+        check ($t7, $t2, -7)
 
-        # bottom right
-        winCheckLoop2:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, -7
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 8
-            bgt $t2, $t3, afterLoop2
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop2
-        
-        afterLoop2:
-
-        # initiate counter
+        # check - direction
         li $t7, 0
         # set $t2 to address of play
-        add $t2, $s2, $zero
-
-        # left
-        winCheckLoop3:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, 1
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 56
-            bgt $t2, $t3, afterLoop3
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop3
-        
-        afterLoop3:
-
-        # set $t2 to address of next spot
+        addi $t2, $s2, 0
+        check ($t7, $t2, 1)
+        # set $t2 to address of first spot in next direction
         addi $t2, $s2, -1
+        check ($t7, $t2, -1)
 
-        # right
-        winCheckLoop4:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, -1
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 8
-            bgt $t2, $t3, afterLoop4
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop4
-        
-        afterLoop4:
-
-        # initiate counter
+        # check / direction
         li $t7, 0
         # set $t2 to address of play
-        add $t2, $s2, $zero
+        addi $t2, $s2, 0
+        check ($t7, $t2, -9)
+        # set $t2 to address of first spot in next direction
+        addi $t2, $s2, 9
+        check ($t7, $t2, 9)
 
-        # bottom left
-        winCheckLoop5:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, 9
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 56
-            bgt $t2, $t3, afterLoop5
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop5
-        
-        afterLoop5:
-
-        # set $t2 to address of next spot
-        addi $t2, $s2, -9
-
-        # upper right
-        winCheckLoop6:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, -9
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 8
-            bgt $t2, $t3, afterLoop6
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop6
-        
-        afterLoop6:
-
-        # initiate counter
+        # check | direction
         li $t7, 0
         # set $t2 to address of play
-        add $t2, $s2, $zero
-
-        # bottom
-        winCheckLoop7:
-            # increment counter
-            addi $t7, 1
-            # if counter == 4, game has been won
-            beq $t7, $t6, GameEnd
-            
-            # load next spot
-            addi $t2, $t2, -8
-
-            # if looking at non-existant '7th' row, break out of loop
-            addi $t3, $s0, 8
-            bgt $t2, $t3, afterLoop7
-
-            lb $t1, ($t2)
-        beq $t0, $t1, winCheckLoop7
-        
-        afterLoop7:
+        addi $t2, $s2, 0
+        check ($t7, $t2, -8)
+        # set $t2 to address of first spot in next direction
+        addi $t2, $s2, 8
+        check (%$t7, $t2, 8)
 
         # if all spaces filled game is a Tie
 		beq $s7, 42, Tie
@@ -231,7 +135,7 @@
 GameEnd:		
 		li $v0, 4
 		# if turn is even AI Won, else player won
-		beqz $s6, AIWin
+		bnez $s6, AIWin
 		
 # print 'You Won! :D', then exit
 PlayerWin:		

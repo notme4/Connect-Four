@@ -32,11 +32,6 @@ main:
 	la $s0, Board
 	# set counter to 0
 	li Counter, 0
-	# argument prepared for displayBoard
-	add $a0, $s0, $zero
-	# jump to displayBoard 'function'
-	jal DisplayBoard		
-	# displayBoard takes 1 argument: address of Board, and has no return	
 	
 	loop1:			
 		
@@ -59,7 +54,6 @@ main:
 		# set $ra for after the choice
 		jal choice
 
-
 		# address of the column is moved to $s1
 		add $s1, $v0, $zero
 		# address of the play is moved to $s2
@@ -78,9 +72,9 @@ main:
 		
 	# TO BE MOVED to addPiece ==================
 		# store token value in cell
-		li $t9, 'R'
+		li $t9, 'O'
 		beqz $s6, Store
-			addi $t9, $t9, 7
+			addi $t9, $t9, 9
 		Store:
 		sb $t9, 0($s2)
 		# decrement column height value
@@ -106,7 +100,7 @@ main:
 		# if someone has won, $v0 is 1
 		
 		# jumps to gameEnd checks if game has been won
-		bnez $v0, GameEnd
+		bnez $v0, GameOver
 		
 		# increment Counter
 		addi Counter, Counter, 1
@@ -121,5 +115,5 @@ main:
 # .include fileForAddPiece
 # ==========================================
 
-GameEnd:
+GameOver:
 	exit
