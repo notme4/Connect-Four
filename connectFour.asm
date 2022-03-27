@@ -13,9 +13,6 @@
 	Board:				.asciiz		"0000000\00000000\n0000000\n0000000\n0000000\n0000000\n0000000\n\n"
 	# Board is an array of 56 bytes, each row of the connect four Board is 7 bytes with a \n in the 8th for ease of printing
 	#		the 0th row are pointers to the next empty locations (relative to it's location) in each column (ascii '0' just happened to be the right number)
-	TieMsg:				.asciiz	 	"Game was a Tie :|"
-	AIWinMsg:			.asciiz		"You lost :("
-	PlayerWinMsg:		.asciiz		"You Won! :D"
 	
 	.globl main
 	.globl makePlay
@@ -101,11 +98,11 @@ main:
 	# displayBoard takes 1 argument: address of Board, and has no return
 # ============================================================================
 		
-		
+		# arguments prepared for WinCheck
 		add $a0, $s0, $zero
 		add $a1, $s2, $zero
 		# jump to winCheck 'function'
-		jal WinCheck		# winCheck has 2 arguments: Board address and play spot, and has 1 return: 1 for win, 0 for no win
+		jal WinCheck		# winCheck has 3 arguments: Board address, play spot, and turn #; and has 1 return: 1 for win, 0 for no win
 		# if someone has won, $v0 is 1
 		
 		# jumps to gameEnd checks if game has been won
@@ -113,45 +110,16 @@ main:
 		
 		# increment Counter
 		addi Counter, Counter, 1
-				
-		# if all spaces filled game is a Tie
-		beq Counter, 42, Tie
 		
 		# jump to beginning of loop
 		j loop1
 		
 # ==================================
-# check who won
-GameEnd:		
-		li $v0, 4
-		# if turn is even AI Won, else player won
-		beqz $s6, AIWin
-		
-# print 'You Won! :D', then exit
-PlayerWin:		
-		la $a0, PlayerWinMsg
-		syscall
-		exit
-# ===================================
-# print 'You Lost :(', then exit
-AIWin:			
-		la $a0, AIWinMsg
-		syscall
-		exit
-# ===================================
-# print 'Game was a Tie :|', then exit
-Tie:			
-		la $a0, TieMsg
-		li $v0, 4
-		syscall
-		exit
-# =============
 
 .include "Choice.asm"
-# .include fileForWinCheck
+.include "WinCheck.asm"
 # .include fileForAddPiece
 # ==========================================
 
-WinCheck:		
-				add $v0, $s6, $zero
-				jr $ra
+GameEnd:
+	exit
