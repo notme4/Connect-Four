@@ -83,14 +83,11 @@ main:
 		sb $t0, ($s1)
 	# END TO BE MOVED to addPiece ==============
 		
-
-# can this be deleted now? ===================================================
 		# argument prepared for displayBoard
 		add $a0, $s0, $zero
 		# jump to displayBoard 'function'
 		jal DisplayBoard		
 	# displayBoard takes 1 argument: address of Board, and has no return
-# ============================================================================
 		
 		# arguments prepared for WinCheck
 		add $a0, $s0, $zero

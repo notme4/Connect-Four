@@ -144,7 +144,7 @@
         # col is filled get a new input
         beq $t3, $zero, colFull
 
-        # get address of play and store in $v0
+        # get address of play and store in $v1
         add $v1, $t3, $v0
 
       # fix $s0, and prepare to return
