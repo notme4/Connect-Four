@@ -1,8 +1,8 @@
 # ==============================================================================
 # displayBoard.asm:
 #	Description:	'function' to display board for Connect 4 project
-#	Author:		    Connor Funk
-#`	Date:		    Mar. 25, 2022
+#	Author:		    notme4
+#`	Date:		    Mar. 28, 2022
 #	Version:        0.0.1
 #	Notes:		
 # ==============================================================================
@@ -14,6 +14,8 @@
 .text
     DisplayBoard:	
 	# print out the Board
+	# DisplayBoard takes 1 argument: address of Board, and has no return
+	
 		# set $t0 to the start of the board
 		addi $t0, $a0, 8
 
@@ -23,13 +25,13 @@
 		# set syscall choice to print char
 		li $v0, 11
 
-		# begin print loop
+		# begin printing loop
 		DisplayLoop:
-			# print out spacer between cols
+			# print out column seperator
 			li $a0, '|'
 			syscall
 
-			# print out space
+			# print out value of cell
 			lb $a0, 0($t0)
 			syscall
 
@@ -38,13 +40,15 @@
 
 			# loop if line is not finished printing
 			bne $a0, '\n', DisplayLoop
-				# print out spacers between rows
+			
+				# print out row seperator
 				la $a0, BoardSplit
 				li $v0, 4
 				syscall
 				
 				# reset syscall choice to print char
 				li $v0, 11
+				
 		# loop if board is not finished printing
 		bne $t0, $t1, DisplayLoop
 		
