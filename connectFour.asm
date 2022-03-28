@@ -93,6 +93,7 @@ Main:
 		# arguments prepared for WinCheck
 		add $a0, $s0, $zero
 		add $a1, $s2, $zero
+		add $a2, counter, $zero
 		# jump to winCheck 'function'
 		jal WinCheck		# winCheck has 3 arguments: Board address, play spot, and turn #; and has 1 return: 1 for win, 0 for no win
 		# if someone has won, $v0 is 1

@@ -61,7 +61,7 @@
 
     j WinCheckLoop
     
-    AfterWingCheckLoop:
+    AfterWinCheckLoop:
 .end_macro 
 # ======================================================
 
@@ -134,7 +134,7 @@
 # check who won
 GameEnd:		
 		li $v0, 4
-		# if turn is even AI Won, else player won
+		# if turn is odd AI Won, else player won
 		bnez $s6, AIWin
 		
 # print 'You Won! :D', then exit
