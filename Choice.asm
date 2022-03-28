@@ -14,9 +14,9 @@
 
 # ==============================================================================
 # data segment for AIChoice
-    posPlays:       .byte   0,  1,  2,  3,  4,  5,  6
+    PosPlays:       .byte   0,  1,  2,  3,  4,  5,  6
     
-    numPlays:       .byte   7
+    NumPlays:       .byte   7
     # AI's choice of 
 
 
@@ -36,17 +36,17 @@
 
 #        add $a0, $a1, $zero
 
-	rechoose:
+	Rechoose:
 
         # get a random integer in play space
         li $v0, 42
-        lb $a1, numPlays
+        lb $a1, NumPlays
         syscall
 		
 		#set $t6 to AI's Choice of option
 		add $t6, $a0, $zero
         # set $t7 to AI's Choice of column
-        lb $t7, posPlays($a0)
+        lb $t7, PosPlays($a0)
 
 		# get next open location in that column
 		add $v0, $s0, $t7
@@ -54,7 +54,7 @@
 		lb $t1, ($v0)
 		
         # if no more valid plays on the column jump to invalid play
-        beqz $t1, invalidPlay
+        beqz $t1, InvalidPlay
 
 		# get the address of the play
 		add $t1, $t1, $t7
@@ -68,32 +68,32 @@
       # return
       jr $ra
 
-    invalidPlay:
-        # decrement numPlays
-        lb $t0, numPlays
+    InvalidPlay:
+        # decrement NumPlays
+        lb $t0, NumPlays
         addi $t0, $t0, -1
-        sb $t0, numPlays
+        sb $t0, NumPlays
 
-        posPlaysLoop:
-        # end loop if at end of posPlays
-        bge $t6, $t0, rechoose
-            lb $t3, posPlays + 1 ($t6)
-            sb $t3, posPlays ($t6)
+        PosPlaysLoop:
+        # end loop if at end of PosPlays
+        bge $t6, $t0, Rechoose
+            lb $t3, PosPlays + 1 ($t6)
+            sb $t3, PosPlays ($t6)
             addi $t6, $t6, 1
 
-        j posPlaysLoop
+        j PosPlaysLoop
 
 
 # ==============================================================================
 .data
 # data segment for PlayerChoice
 
-    prompt:         .asciiz         "Enter a number between 0 and 6 \n"
-    spots:          .asciiz         " 0 1 2 3 4 5 6 \n | | | | | | | \n v v v v v v v \n"
+    Prompt:         .asciiz         "Enter a number between 0 and 6 \n"
+    Spots:          .asciiz         " 0 1 2 3 4 5 6 \n | | | | | | | \n v v v v v v v \n"
 
-    tooSmallMsg:    .asciiz         "Error: input must be at least 0 \n"
-    tooLargeMsg:    .asciiz         "Error: input must be at most 6 \n"
-    colFullMsg:     .asciiz         "Error: column is full \n"
+    TooSmallMsg:    .asciiz         "Error: input must be at least 0 \n"
+    TooLargeMsg:    .asciiz         "Error: input must be at most 6 \n"
+    ColFullMsg:     .asciiz         "Error: column is full \n"
 
 .text
     PlayerChoice:
@@ -105,10 +105,10 @@
         # move address of board to $s0
         add $s0, $a0, $zero
     
-        getPlayerChoice:
-            # print spots
+        GetPlayerChoice:
+            # print Spots
             li $v0, 4
-            la $a0, spots
+            la $a0, Spots
             syscall
 
             # prepare for DisplayBoard
@@ -116,9 +116,9 @@
             # jump to DisplayBoard
             jal DisplayBoard
 
-            # print prompt
+            # print Prompt
             li $v0, 4
-            la $a0, prompt
+            la $a0, Prompt
             syscall
 
             # get user input
@@ -129,11 +129,11 @@
             add $t0, $v0, $zero
 
         # if player choice is too low get a new input
-        blt $t0, $zero, tooSmall
+        blt $t0, $zero, TooSmall
         
         # if player choice is too high get a new input
         li $t1, 6
-        bgt $t0, $t1, tooLarge
+        bgt $t0, $t1, TooLarge
             
             # get address of col and put in $v0
             add $v0, $t0, $s0
@@ -142,7 +142,7 @@
             lb $t3, ($v0)
 
         # col is filled get a new input
-        beq $t3, $zero, colFull
+        beq $t3, $zero, ColFull
 
         # get address of play and store in $v1
         add $v1, $t3, $v0
@@ -161,17 +161,17 @@
         la $a0, %label
         syscall
 
-        # jump to getPlayerChoice
+        # jump to GetPlayerChoice
         j %returnLabel
     .end_macro # ============================================
 
-    tooSmall:
-        errorMsg (tooSmallMsg, getPlayerChoice)
+    TooSmall:
+        errorMsg (TooSmallMsg, GetPlayerChoice)
 
-    tooLarge:
-        errorMsg (tooLargeMsg, getPlayerChoice)
+    TooLarge:
+        errorMsg (TooLargeMsg, GetPlayerChoice)
 
-    colFull:
-        errorMsg (colFullMsg, getPlayerChoice)
+    ColFull:
+        errorMsg (ColFullMsg, GetPlayerChoice)
 
 .include "DisplayBoard.asm"

@@ -37,11 +37,11 @@
 # check for win macro
 .macro check (%counter, %next, %val)
 
-    winCheckLoop:
+    WinCheckLoop:
         # get value of the next in direction and put in $t1
         lb $t1, (%next)
     # if $t1 != $t2 (next spot has a different value to play spot) break out of loop
-    bne $t0, $t1, afterLoop
+    bne $t0, $t1, AfterWinCheckLoop
 
         # increment counter
         addi %counter, %counter, 1
@@ -53,15 +53,15 @@
         
         # if looking at non-existant '7th' row, break out of loop
         addi $t3, $s0, 56
-    bgt %next, $t3, afterLoop
+    bgt %next, $t3, AfterWinCheckLoop
 
         # if looking at non-existant '0th' row, break out of loop
         addi $t3, $s0, 8
-    blt %next, $t3, afterLoop
+    blt %next, $t3, AfterWinCheckLoop
 
-    j winCheckLoop
+    j WinCheckLoop
     
-    afterLoop:
+    AfterWingCheckLoop:
 .end_macro 
 # ======================================================
 
