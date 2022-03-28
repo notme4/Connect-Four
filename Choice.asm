@@ -24,7 +24,7 @@
 
     AIChoice:
     # get the AI's choice of column, and the actual location of the play
-    # AIChoice takes 1 argument: address of Board; and has 1 return: the address of the play
+    # AIChoice takes 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
     
       # save $s0 and $ra to stack
       addi $sp, $sp, -8
