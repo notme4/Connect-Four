@@ -14,9 +14,10 @@
 	# Board is an array of 56 bytes, each row of the connect four Board is 7 bytes with a \n in the 8th for ease of printing
 	#		the 0th row are pointers to the next empty locations (relative to it's location) in each column (ascii '0' just happened to be the right number)
 	
-	.globl main
-	.globl makePlay
-	.eqv Counter $s7
+	.globl Main
+	.globl MakePlay
+	
+	.eqv counter $s7
 	
 .text
 # =======================================================
@@ -27,32 +28,32 @@
 .end_macro 
 # ======================================================
 
-main:			
+Main:			
 	# store Board address in $s0
 	la $s0, Board
 	# set counter to 0
-	li Counter, 0
+	li counter, 0
 	
-	loop1:			
+	Loop1:			
 		
 		# store counter parity in $s6
-		andi $s6, Counter, 1
+		andi $s6, counter, 1
 		
-		# jump to makePlay to set $ra
-		j makePlay
-	choice:
-		# arguments prepared for choice
+		# jump to MakePlay to set $ra
+		j MakePlay
+	Choice:
+		# arguments prepared for Choice
 		add $a0, $s0, $zero
-		# if Counter is even AI turn, else player turn
+		# if counter is even AI turn, else player turn
 		bnez $s6, AIChoice
 	# AIChoice takes 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
 		# jump to playerChoice 'function'
 		j PlayerChoice
 	# PlayerChoice take 1 argument: address of Board; and has 2 returns: the address of the column and the address of the play
 		
-	makePlay:
-		# set $ra for after the choice
-		jal choice
+	MakePlay:
+		# set $ra for after the Choice
+		jal Choice
 
 		# address of the column is moved to $s1
 		add $s1, $v0, $zero
@@ -87,11 +88,12 @@ main:
 		add $a0, $s0, $zero
 		# jump to displayBoard 'function'
 		jal DisplayBoard		
-	# displayBoard takes 1 argument: address of Board, and has no return
+	# DisplayBoard takes 1 argument: address of Board, and has no return
 		
 		# arguments prepared for WinCheck
 		add $a0, $s0, $zero
 		add $a1, $s2, $zero
+		add $a2, counter, $zero
 		# jump to winCheck 'function'
 		jal WinCheck		# winCheck has 3 arguments: Board address, play spot, and turn #; and has 1 return: 1 for win, 0 for no win
 		# if someone has won, $v0 is 1
@@ -99,11 +101,11 @@ main:
 		# jumps to gameEnd checks if game has been won
 		bnez $v0, GameOver
 		
-		# increment Counter
-		addi Counter, Counter, 1
+		# increment counter
+		addi counter, counter, 1
 		
-		# jump to beginning of loop
-		j loop1
+		# jump to beginning of Loop1
+		j Loop1
 		
 # ==================================
 

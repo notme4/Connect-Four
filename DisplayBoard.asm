@@ -24,7 +24,7 @@
 		li $v0, 11
 
 		# begin print loop
-		displayLoop:
+		DisplayLoop:
 			# print out spacer between cols
 			li $a0, '|'
 			syscall
@@ -37,7 +37,7 @@
 			addi $t0, $t0, 1
 
 			# loop if line is not finished printing
-			bne $a0, '\n', displayLoop
+			bne $a0, '\n', DisplayLoop
 				# print out spacers between rows
 				la $a0, BoardSplit
 				li $v0, 4
@@ -46,7 +46,7 @@
 				# reset syscall choice to print char
 				li $v0, 11
 		# loop if board is not finished printing
-		bne $t0, $t1, displayLoop
+		bne $t0, $t1, DisplayLoop
 		
 		# print new lines to seperate board
 		li $a0, '\n'
