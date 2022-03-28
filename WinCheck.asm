@@ -2,7 +2,7 @@
 # WinCheck.asm:
 #	Description:	'function' to determine if someone has won the game
 #	Author:		    notme4
-#`	Date:		    Mar. 28, 2022
+#	Date:		    Mar. 28, 2022
 #	Notes:		
 # ==============================================================================
 .data

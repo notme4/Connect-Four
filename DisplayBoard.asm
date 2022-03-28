@@ -1,9 +1,8 @@
 # ==============================================================================
-# displayBoard.asm:
+# DisplayBoard.asm:
 #	Description:	'function' to display board for Connect 4 project
 #	Author:		    notme4
-#`	Date:		    Mar. 28, 2022
-#	Version:        0.0.1
+#	Date:		    Mar. 28, 2022
 #	Notes:		
 # ==============================================================================
 .data

@@ -4,4 +4,4 @@ critical:
     
 # Add/remove 'waiting' label if issue contains the word 'waiting'
 waiting:
-    - 'waiting'
+    - '[Ww]aiting'

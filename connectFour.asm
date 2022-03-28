@@ -2,7 +2,7 @@
 # connectFour.asm:
 #	Purpose:	main 'function' for Connect 4 project
 #	Author:		notme4 
-#`	Date:		Mar. 28, 2022
+#	Date:		Mar. 28, 2022
 #	Notes:		
 # ==============================================================================
 .data
@@ -61,30 +61,11 @@ Main:
 		# address of the play is moved to $s2
 		add $s2, $v1, $zero
 
-
 		# arguments prepared for addPiece
-		add $a0, $s0, $zero
-		add $a1, $s1, $zero
-
-	#	jal addPiece
-	# addPiece takes 2 arguments: address of board, and address of play; and has 0 returns: updates board
-		
-	# TO BE MOVED to addPiece ==================
-		# get token value
-		li $t9, 'O'
-		beqz $s6, Store
-			# add add to make token value 'X'
-			addi $t9, $t9, 9
-			
-		Store:
-		# store token value in cell
-		sb $t9, 0($s2)
-		
-		# decrement column height value
-		lb $t1, ($s1)
-		addi $t0, $t1, -8
-		sb $t0, ($s1)
-	# END TO BE MOVED to addPiece ==============
+		add $a0, $s1, $zero
+		add $a1, $s2, $zero
+		add $a2, $s6, $zero
+		jal AddPiece
 		
 		# argument prepared for displayBoard
 		add $a0, $s0, $zero
@@ -112,7 +93,7 @@ Main:
 
 .include "Choice.asm"
 .include "WinCheck.asm"
-# .include fileForAddPiece
+.include "AddPiece.asm"
 # ==========================================
 
 GameOver:

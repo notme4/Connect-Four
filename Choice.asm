@@ -2,7 +2,7 @@
 # Choice.asm:
 #	Description:	'functions' to get the player/AI's choice for Connect 4 project
 #	Author:		    notme4
-#`	Date:		    Mar. 28, 2022
+#	Date:		    Mar. 28, 2022
 #	Notes:		
 # ==============================================================================
 .data
