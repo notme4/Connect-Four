@@ -13,7 +13,7 @@
 	# 	the bytes in the 0th row show the byte offset (from itself) to the next empty spot in it's column (0 just happened to be the 
 	# ascii character with the right number) 
 	
-	.globl Main
+	.globl main
 	.globl MakePlay
 	
 	
@@ -25,8 +25,8 @@
 				syscall	
 .end_macro 
 # ======================================================
-
-Main:
+	
+main:
 	# main function for Connect-Four
 	
 	# store Board address in $s0
