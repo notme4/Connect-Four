@@ -144,7 +144,7 @@
         	check ($t7, $t2, 8)
 
         # if all spaces filled game is a Tie
-		beq $s7, 42, Tie
+		beq $s7, 41, Tie
 
       return ($zero)
 
