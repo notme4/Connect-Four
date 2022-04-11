@@ -33,10 +33,9 @@
 		# get token value
 		li $t9, 'o'
 		beqz $s6, Store
-			# add add to make token value 'X'
-			li $t9, 215
-			
+			li $t9, '×'
 		Store:
+		
 		# store token value in cell
 		sb $t9, 0($s2)
 		
