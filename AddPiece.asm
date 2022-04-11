@@ -31,12 +31,11 @@
       	add $s6, $a2, $zero
       	
 		# get token value
-		li $t9, 'O'
+		li $t9, 'o'
 		beqz $s6, Store
-			# add add to make token value 'X'
-			addi $t9, $t9, 9
-			
+			li $t9, '×'
 		Store:
+		
 		# store token value in cell
 		sb $t9, 0($s2)
 		
