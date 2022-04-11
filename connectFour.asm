@@ -13,6 +13,8 @@
 	# 	the bytes in the 0th row show the byte offset (from itself) to the next empty spot in it's column (0 just happened to be the 
 	# ascii character with the right number) 
 	
+	PlayArrows:			.asciiz		" 1 2 3 4 5 6 7 \n | | | | | | | \n v v v v v v v \n"
+	
 	.globl main
 	.globl MakePlay
 	
@@ -33,6 +35,16 @@ main:
 	la $s0, Board
 	# set turn counter to 0
 	li $s7, 0
+	
+	# print PlayArrows
+	li $v0, 4
+	la $a0, PlayArrows
+	syscall
+			
+	# print board
+	# prepare for DisplayBoard
+	add $a0, $s0, $zero
+	jal DisplayBoard
 	
 	GameplayLoop:
 		
