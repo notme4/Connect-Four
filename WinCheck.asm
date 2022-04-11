@@ -64,6 +64,30 @@
     
     AfterWinCheckLoop:
 .end_macro 
+# ===========================================
+# check for win macro
+.macro replace (%replaceVal, %directionVal)
+		add $t2, $s2, $zero
+    ReplaceLoop:
+        # get value of the next in direction and put in $t1
+        add $t2, $t2, %directionVal
+        lb $t1, ($t2)
+    # if $t1 != $t0 (next spot has a different value to play spot) break out of loop
+    bne $t0, $t1, AfterReplaceLoop
+        
+        # if looking at non-existant '7th' row, break out of loop
+        addi $t3, $s0, 56
+    bgt $t2, $t3, AfterReplaceLoop
+
+        # if looking at non-existant '0th' row, break out of loop
+        addi $t3, $s0, 8
+    blt $t2, $t3, AfterReplaceLoop
+		
+		sb %replaceVal ($t2)
+    j ReplaceLoop
+    
+    AfterReplaceLoop:
+.end_macro 
 # =================================================================================
 # text segment
 
@@ -151,18 +175,38 @@
 
 # check who won
 GameEnd:		
-		li $v0, 4
 		# if turn is odd AI Won, else player won
 		bnez $s6, AIWin
 		
 # print 'You Won! :D', then exit
-PlayerWin:		
+PlayerWin:	
+		li $t7, 'Ø'
+		replace ($t7, $t4)
+		sub $t4, $zero, $t4
+		replace ($t7, $t4)
+		sb $t7, ($s2)
+		
+		#break
+		
+		jal DisplayBoard
+		
+		li $v0, 4
 		la $a0, PlayerWinMsg
 		syscall
+		
 		return ($t4)
 # ===================================
 # print 'You Lost :(', then exit
-AIWin:			
+AIWin:	
+		li $t7, '¤'
+		replace ($t7, $t4)
+		sub $t4, $zero, $t4
+		replace ($t7, $t4)
+		sb $t7, ($s2)
+		
+		jal DisplayBoard
+		
+		li $v0, 4
 		la $a0, AIWinMsg
 		syscall
 		return ($t4)
@@ -175,3 +219,4 @@ Tie:
 		li $t4, 57
 		return ($t4)
 # =============
+
