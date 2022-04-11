@@ -51,8 +51,8 @@
         #     column 5
 
 		# get next open location offset for that column
-		add $v0, $s0, $t7
-		lb $t1, ($v0)
+		add $t2, $s0, $t7
+		lb $t1, ($t2)
 		
         # if no more valid plays on the column (next open location offset is 0) play is invalid and the column needs to
         #     be deleted from available columns
@@ -61,6 +61,22 @@
 		# get the address of the play and store in $v1
 		add $t1, $t1, $t7
 		add $v1, $t1, $s0
+		
+		sll $t7, $t7, 1
+		li $v0, 11
+		AIChoiceIndicatorLoop:
+			li $a0, ' '
+			syscall
+			addi $t7, $t7, -1
+		bne $t7, -1, AIChoiceIndicatorLoop
+		
+		li $a0, 'v'
+		syscall
+		li $a0, '\n'
+		syscall
+		
+		add $v0, $t2, $zero
+		
 
 	  # fix $s0, and prepare to return
       lw $s0, 4($sp)
@@ -96,11 +112,10 @@
 .data
 # data segment for PlayerChoice
 
-    Prompt:         .asciiz         "Enter a number between 0 and 6 \n"
-    PlayArrows:          .asciiz         " 0 1 2 3 4 5 6 \n | | | | | | | \n v v v v v v v \n"
+    Prompt:         .asciiz         "Enter a number between 1 and 7 \n"
 
-    TooSmallMsg:    .asciiz         "Error: input must be at least 0 \n"
-    TooLargeMsg:    .asciiz         "Error: input must be at most 6 \n"
+    TooSmallMsg:    .asciiz         "Error: input must be at least 1 \n"
+    TooLargeMsg:    .asciiz         "Error: input must be at most 7 \n"
     ColFullMsg:     .asciiz         "Error: column is full \n"
 
 .text
@@ -133,17 +148,6 @@
         add $s0, $a0, $zero
 		
 		GetPlayerChoice:
-            
-            # print PlayArrows
-            li $v0, 4
-            la $a0, PlayArrows
-            syscall
-			
-			# print board
-	            # prepare for DisplayBoard
-    	        add $a0, $s0, $zero
-    	        # jump to DisplayBoard
-        	    jal DisplayBoard
 
             # print Prompt
             li $v0, 4
@@ -154,8 +158,8 @@
             li $v0, 5
             syscall
 
-            # move answer to $t0
-            add $t0, $v0, $zero
+            # move answer to $t0 and subtract one to get actual column
+            addi $t0, $v0, -1
 
         # if player choice is too low get a new input
         blt $t0, $zero, TooSmall
